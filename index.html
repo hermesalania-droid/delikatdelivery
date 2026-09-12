@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Деликат</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Деликат">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#111111">
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23111'/%3E%3Ctext x='90' y='122' font-family='Arial' font-size='96' font-weight='700' fill='%23fff' text-anchor='middle'%3E%D0%94%3C/text%3E%3C/svg%3E">
+
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--brand:#C8102E;--brand-dk:#9E0B23;--brand-lt:#FBE9EC;--brand-md:#E86A7C;--sale:#111;--sale-lt:#F3F2EE;--bonus:#FAC775;--bonus-dk:#633806;
+        --tile:#F3F2EE;--ink:#111;--ink-2:#6B6E68;--ink-3:#A3A69F;--line:#E7E6E1;--r-xl:24px;--r-lg:16px;
+        --cream:#FBF1D9;--rose:#F7E4E1;--sage:#E6ECDF;--sky:#E3EDF6;--sand:#F1E7DA;--stone:#ECEAE5;--ok:#3B6D11;--ok-lt:#EAF3DE;--bg:#F3F2EE}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#DCDCD6;font-family:"Manrope",system-ui,sans-serif;color:var(--ink);display:flex;flex-direction:column;align-items:center;padding:24px 16px;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .phone{width:390px;height:844px;background:#fff;border-radius:44px;position:relative;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.18);flex:none}
+  .scr{position:absolute;inset:0;display:none}
+  .scr.on{display:block}
+  #s-checkout{background:var(--bg)}
+  .tap{cursor:pointer}
+  .hint{margin-top:16px;font-size:13px;color:#555;text-align:center;max-width:390px}
+  #ok{position:absolute;inset:0;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:32px;text-align:center;z-index:9}
+  #ok.on{display:flex}
+  #ok .ck{width:88px;height:88px;border-radius:50%;background:var(--brand);display:grid;place-items:center;margin-bottom:8px}
+  #ok .ck svg{width:44px;height:44px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+  #ok h1{font-size:24px;font-weight:800;letter-spacing:-.02em}
+  #ok p{font-size:15px;color:var(--ink-2);line-height:1.4}
+  #ok .b{margin-top:16px;background:var(--ink);color:#fff;border-radius:999px;padding:16px 28px;font-weight:800;cursor:pointer}
+  #toast{position:absolute;left:50%;top:120px;transform:translateX(-50%) translateY(-8px);background:var(--ink);color:#fff;font-size:13px;font-weight:700;padding:10px 16px;border-radius:999px;opacity:0;transition:.2s;pointer-events:none;z-index:8;white-space:nowrap}
+  #toast.on{opacity:1;transform:translateX(-50%)}
+  @media (max-width:430px){body{padding:0}.phone{width:100vw;height:100vh;border-radius:0;box-shadow:none}.hint{display:none}}
+#s-home .screen{height:100%;overflow-y:auto;scrollbar-width:none;padding-bottom:150px}#s-home .screen::-webkit-scrollbar{display:none}#s-home .pad{padding:0 16px}#s-home .status{display:flex;justify-content:space-between;padding:16px 28px 0;font-size:14px;font-weight:700}#s-home .header{display:flex;align-items:center;gap:12px;margin-top:12px}#s-home .logo{width:48px;height:48px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:26px;font-weight:800;flex:none}#s-home .title{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.1}#s-home .header > div:nth-child(2){min-width:0}#s-home .addr{font-size:15px;color:var(--ink-2);display:flex;align-items:center;gap:4px;margin-top:2px;white-space:nowrap}#s-home .addr span{overflow:hidden;text-overflow:ellipsis}#s-home .addr svg{width:14px;height:14px}#s-home .eta{margin-left:auto;background:var(--brand-lt);color:var(--brand-dk);border-radius:999px;padding:8px 12px;font-size:14px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:6px}#s-home .eta::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--brand)}#s-home .search{display:flex;gap:10px;margin-top:20px}#s-home .search .field{flex:1;height:48px;border-radius:999px;background:var(--tile);display:flex;align-items:center;gap:10px;padding:0 18px;color:var(--ink-3);font-size:16px}#s-home .search .scan{width:48px;height:48px;border-radius:50%;background:var(--tile);display:grid;place-items:center}#s-home .search svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}#s-home .banners{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:104px 104px;gap:10px;margin-top:24px}#s-home .bn{border-radius:var(--r-xl);padding:16px;position:relative;overflow:hidden;color:#fff;font-size:18px;font-weight:800;line-height:1.15;letter-spacing:-.01em}#s-home .bn small{display:block;font-size:12px;font-weight:500;opacity:.85;margin-top:4px}#s-home .bn-1{background:var(--brand)}#s-home .bn-2{background:var(--ink)}#s-home .bn-3{grid-column:2;grid-row:1/3;background:var(--tile);color:var(--ink)}#s-home .bn-1 .pct{position:absolute;right:-6px;bottom:-14px;font-size:64px;font-weight:800;color:rgba(255,255,255,.18);letter-spacing:-.05em}#s-home .bn-2 .truck{position:absolute;right:10px;bottom:6px;width:52px;height:32px;opacity:.85}#s-home .bn-3 .stack{position:absolute;left:12px;right:12px;bottom:14px;height:104px}#s-home .dots{display:flex;gap:5px;justify-content:center;margin-top:10px}#s-home .dots i{width:6px;height:6px;border-radius:50%;background:var(--line)}#s-home .dots i:first-child{width:16px;border-radius:3px;background:var(--brand)}#s-home .row{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding:0 16px}#s-home .row::-webkit-scrollbar{display:none}#s-home .cats{margin-top:20px}#s-home .cat{flex:none;width:64px;text-align:center;font-size:12px;font-weight:500;color:var(--ink-2);line-height:1.2}#s-home .cat .ic{width:60px;height:60px;border-radius:20px;background:var(--tile);margin:0 auto 6px;display:grid;place-items:center}#s-home .cat .ic svg{width:30px;height:30px}#s-home .chips{margin-top:20px;gap:8px}#s-home .chip{flex:none;height:38px;padding:0 14px;border-radius:999px;background:var(--tile);font-size:15px;font-weight:700;display:flex;align-items:center;gap:6px;color:var(--ink)}#s-home .chip.on{background:var(--ink);color:#fff}#s-home .chip.sale{color:var(--brand)}#s-home .chip svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}#s-home .sec{display:flex;justify-content:space-between;align-items:baseline;margin-top:28px}#s-home .sec h2{font-size:20px;font-weight:800;letter-spacing:-.02em}#s-home .sec a{font-size:14px;font-weight:700;color:var(--brand);text-decoration:none}#s-home .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 10px;margin-top:14px}#s-home .tile{height:174px;border-radius:var(--r-lg);background:var(--tile);position:relative;display:grid;place-items:center}#s-home .tile svg{width:120px;height:130px}#s-home .plus{position:absolute;right:8px;bottom:8px;width:40px;height:40px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.08)}#s-home .plus::before, #s-home .plus::after{content:"";position:absolute;background:var(--ink);border-radius:2px}#s-home .plus::before{width:16px;height:2.5px}#s-home .plus::after{width:2.5px;height:16px}#s-home .price{display:flex;align-items:baseline;gap:6px;margin-top:8px;flex-wrap:wrap}#s-home .price b{font-size:20px;font-weight:800;letter-spacing:-.02em}#s-home .price b.sale{color:var(--brand)}#s-home .price s{font-size:14px;color:var(--ink-3)}#s-home .price em{font-style:normal;font-size:12px;font-weight:800;color:#fff;background:var(--brand);padding:2px 6px;border-radius:6px}#s-home .name{font-size:14px;line-height:1.3;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}#s-home .w{font-size:12px;color:var(--ink-3);margin-top:2px}#s-home .cart{position:absolute;left:16px;right:16px;bottom:88px;height:54px;border-radius:999px;background:var(--ink);color:#fff;display:flex;align-items:center;padding:0 6px 0 20px;font-size:16px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.25)}#s-home .cart .n{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:14px;margin-right:10px}#s-home .cart .go{margin-left:auto;background:var(--brand);border-radius:999px;padding:12px 18px;font-size:15px}#s-home .tabs{position:absolute;left:0;right:0;bottom:0;height:88px;background:#fff;border-top:1px solid var(--line);display:flex;padding:10px 6px 0}#s-home .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--ink-3)}#s-home .tab.on{color:var(--brand)}#s-home .tab svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}#s-home .tab.on svg{stroke-width:2.5}#s-home .home{position:absolute;left:50%;bottom:8px;width:134px;height:5px;border-radius:3px;background:var(--ink);transform:translateX(-50%)}
+#s-catalog .screen{height:100%;overflow-y:auto;scrollbar-width:none;padding-bottom:150px}#s-catalog .screen::-webkit-scrollbar{display:none}#s-catalog .pad{padding:0 16px}#s-catalog .status{display:flex;justify-content:space-between;padding:16px 28px 0;font-size:14px;font-weight:700}#s-catalog .top{display:flex;align-items:center;height:56px;margin-top:6px}#s-catalog .top .t{flex:1;text-align:center;font-size:20px;font-weight:800;letter-spacing:-.02em}#s-catalog .top .b{width:40px;height:40px;display:grid;place-items:center}#s-catalog .top svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}#s-catalog .row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 16px}#s-catalog .row::-webkit-scrollbar{display:none}#s-catalog .quick{margin-top:8px}#s-catalog .q{flex:none;width:116px;height:96px;border-radius:16px;background:var(--tile);padding:12px;font-size:13px;font-weight:700;line-height:1.15;position:relative;overflow:hidden}#s-catalog .q.sale{background:var(--brand);color:#fff}#s-catalog .q.own{background:var(--ink);color:#fff}#s-catalog .q svg{position:absolute;right:-6px;bottom:-6px;width:52px;height:52px}#s-catalog h2{font-size:18px;font-weight:800;letter-spacing:-.02em;margin:32px 16px 12px;display:flex;justify-content:space-between;align-items:baseline}#s-catalog h2 small{font-size:13px;font-weight:700;color:var(--ink-3)}#s-catalog .g{display:grid;gap:8px;padding:0 16px}#s-catalog .g.wn{grid-template-columns:2fr 1fr}#s-catalog .g.eee{grid-template-columns:1fr 1fr 1fr}#s-catalog .g.ee{grid-template-columns:1fr 1fr}#s-catalog .sec-rose .c{background:var(--rose)}#s-catalog .sec-sky .c{background:var(--sky)}#s-catalog .sec-sage .c{background:var(--sage)}#s-catalog .sec-cream .c{background:var(--cream)}#s-catalog .sec-stone .c{background:var(--stone)}#s-catalog .up{position:absolute;left:16px;bottom:154px;width:48px;height:48px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12);display:grid;place-items:center;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .2s,transform .2s;cursor:pointer}#s-catalog .up.show{opacity:1;transform:none;pointer-events:auto}#s-catalog .up svg{width:22px;height:22px;stroke:var(--ink);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}#s-catalog .top{position:sticky;top:0;background:#fff;z-index:2}#s-catalog .g+.g{margin-top:8px}#s-catalog .c{height:104px;border-radius:16px;padding:12px;position:relative;overflow:hidden;display:flex;flex-direction:column}#s-catalog .c b{font-size:15px;font-weight:700;line-height:1.15;letter-spacing:-.01em}#s-catalog .c span{font-size:11px;color:var(--ink-2);margin-top:3px;line-height:1.25;max-width:70%}#s-catalog .c svg{position:absolute;right:-8px;bottom:-10px;width:78px;height:78px}#s-catalog .eee .c svg{width:60px;height:60px;right:-8px;bottom:-8px}#s-catalog .eee .c span{max-width:100%}#s-catalog .eee .c b{font-size:14px}#s-catalog .pill{position:absolute;left:12px;bottom:12px;background:#fff;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:700}#s-catalog .pill.red{color:var(--brand)}#s-catalog .cart{position:absolute;left:16px;right:16px;bottom:88px;height:54px;border-radius:999px;background:var(--ink);color:#fff;display:flex;align-items:center;padding:0 6px 0 20px;font-size:16px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.25)}#s-catalog .cart .n{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:14px;margin-right:10px}#s-catalog .cart .go{margin-left:auto;background:var(--brand);border-radius:999px;padding:12px 18px;font-size:15px}#s-catalog .tabs{position:absolute;left:0;right:0;bottom:0;height:88px;background:#fff;border-top:1px solid var(--line);display:flex;padding:10px 6px 0}#s-catalog .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--ink-3)}#s-catalog .tab.on{color:var(--brand)}#s-catalog .tab svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}#s-catalog .tab.on svg{stroke-width:2.5}#s-catalog .home{position:absolute;left:50%;bottom:8px;width:134px;height:5px;border-radius:3px;background:var(--ink);transform:translateX(-50%)}
+#s-kitchen .screen{height:100%;overflow-y:auto;scrollbar-width:none;padding-bottom:150px}#s-kitchen .screen::-webkit-scrollbar{display:none}#s-kitchen .status{display:flex;justify-content:space-between;padding:16px 28px 0;font-size:14px;font-weight:700}#s-kitchen .top{display:flex;align-items:center;height:56px;margin-top:6px;padding:0 16px;position:sticky;top:0;background:#fff;z-index:2}#s-kitchen .top .ttl{flex:1;text-align:center;font-size:20px;font-weight:800;letter-spacing:-.02em}#s-kitchen .top .b{width:40px;height:40px;display:grid;place-items:center}#s-kitchen .top svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}#s-kitchen h2{font-size:18px;font-weight:800;letter-spacing:-.02em;margin:32px 16px 12px}#s-kitchen .g{display:grid;gap:8px;padding:0 16px}#s-kitchen .g.eee{grid-template-columns:1fr 1fr 1fr}#s-kitchen .g.ee{grid-template-columns:1fr 1fr}#s-kitchen .g.one{grid-template-columns:1fr}#s-kitchen .g+.g{margin-top:8px}#s-kitchen .c{height:104px;border-radius:16px;padding:12px;position:relative;overflow:hidden;background:var(--tile)}#s-kitchen .c b{font-size:14px;font-weight:700;line-height:1.15;letter-spacing:-.01em;display:block;max-width:100%}#s-kitchen .c span{display:block;font-size:11px;color:var(--ink-2);margin-top:3px;line-height:1.25}#s-kitchen .one .c b{font-size:16px}#s-kitchen .pies .c b{font-size:13px;letter-spacing:-.02em}#s-kitchen .one .c span{max-width:60%}#s-kitchen .c svg{position:absolute;right:-8px;bottom:-10px;width:64px;height:64px}#s-kitchen .one .c svg{width:110px;height:110px;right:0;bottom:-24px}#s-kitchen .hero{height:128px;background:var(--rose)}#s-kitchen .hero svg{width:150px;height:150px;right:-16px;bottom:-40px}#s-kitchen .t{position:absolute;left:12px;bottom:12px;background:#fff;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:4px}#s-kitchen .t i{width:6px;height:6px;border-radius:50%;background:var(--brand)}#s-kitchen .stk{position:absolute;left:12px;bottom:12px;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;color:#fff;background:var(--brand)}#s-kitchen .stk.y{background:#E9B44C;color:#412402}#s-kitchen .sec-cream .c{background:var(--cream)}#s-kitchen .sec-sage .c{background:var(--sage)}#s-kitchen .sec-stone .c{background:var(--stone)}#s-kitchen .up{position:absolute;left:16px;bottom:154px;width:48px;height:48px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12);display:grid;place-items:center;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .2s,transform .2s;cursor:pointer}#s-kitchen .up.show{opacity:1;transform:none;pointer-events:auto}#s-kitchen .up svg{width:22px;height:22px;stroke:var(--ink);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}#s-kitchen .cart{position:absolute;left:16px;right:16px;bottom:88px;height:54px;border-radius:999px;background:var(--ink);color:#fff;display:flex;align-items:center;padding:0 6px 0 20px;font-size:16px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.25)}#s-kitchen .cart .n{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:14px;margin-right:10px}#s-kitchen .cart .go{margin-left:auto;background:var(--brand);border-radius:999px;padding:12px 18px;font-size:15px}#s-kitchen .tabs{position:absolute;left:0;right:0;bottom:0;height:88px;background:#fff;border-top:1px solid var(--line);display:flex;padding:10px 6px 0}#s-kitchen .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--ink-3)}#s-kitchen .tab.on{color:var(--brand)}#s-kitchen .tab svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}#s-kitchen .tab.on svg{stroke-width:2.5}#s-kitchen .home{position:absolute;left:50%;bottom:8px;width:134px;height:5px;border-radius:3px;background:var(--ink);transform:translateX(-50%)}
+#s-cart .screen{height:100%;overflow-y:auto;scrollbar-width:none;padding-bottom:230px}#s-cart .screen::-webkit-scrollbar{display:none}#s-cart .pad{padding:0 16px}#s-cart .status{display:flex;justify-content:space-between;padding:16px 28px 0;font-size:14px;font-weight:700}#s-cart .top{display:flex;align-items:center;height:56px;margin-top:6px;padding:0 16px;position:sticky;top:0;background:#fff;z-index:2}#s-cart .top .ttl{flex:1;text-align:center;font-size:20px;font-weight:800;letter-spacing:-.02em}#s-cart .top .b{width:40px;height:40px;display:grid;place-items:center}#s-cart svg.i{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}#s-cart .slot{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--line)}#s-cart .slot .h{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.1}#s-cart .slot .s{font-size:14px;color:var(--ink-2);margin-top:3px}#s-cart .slot .chev{margin-left:auto;width:44px;height:44px;border-radius:50%;background:var(--tile);display:grid;place-items:center;flex:none}#s-cart .chips{display:flex;gap:8px;margin-top:12px}#s-cart .chip{padding:8px 12px;border-radius:999px;background:var(--tile);font-size:13px;font-weight:700;color:var(--ink-2)}#s-cart .chip.on{background:var(--ink);color:#fff}#s-cart .free{padding:14px 0;border-bottom:1px solid var(--line)}#s-cart .free .l{display:flex;justify-content:space-between;font-size:14px;font-weight:700}#s-cart .free .l span{color:var(--ink-2);font-weight:400}#s-cart .bar{height:6px;border-radius:3px;background:var(--tile);margin-top:8px;overflow:hidden}#s-cart .bar i{display:block;height:100%;width:77%;background:var(--brand);border-radius:3px}#s-cart .bonus{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}#s-cart .bonus .ic{width:44px;height:44px;border-radius:50%;background:var(--brand-lt);display:grid;place-items:center;color:var(--brand);flex:none;font-weight:800;font-size:15px}#s-cart .bonus .t{font-size:14px;line-height:1.3}#s-cart .bonus .t span{display:block;color:var(--ink-2);font-size:13px}#s-cart .bonus .btn{margin-left:auto;background:var(--tile);border-radius:999px;padding:9px 12px;font-size:13px;font-weight:700;white-space:nowrap}#s-cart .item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:center}#s-cart .ph{width:64px;height:64px;border-radius:12px;background:var(--tile);display:grid;place-items:center;flex:none;position:relative}#s-cart .ph svg{width:48px;height:48px}#s-cart .our{position:absolute;left:-4px;top:-4px;background:var(--ink);color:#fff;font-size:9px;font-weight:800;padding:2px 5px;border-radius:5px}#s-cart .inf{flex:1;min-width:0}#s-cart .nm{font-size:15px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}#s-cart .pr{margin-top:4px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}#s-cart .pr b{font-size:17px;font-weight:800}#s-cart .pr b.s{color:var(--brand)}#s-cart .pr s{font-size:13px;color:var(--ink-3)}#s-cart .pr em{font-style:normal;font-size:13px;color:var(--ink-2)}#s-cart .note{margin-top:4px;font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:4px}#s-cart .note.ok{color:var(--ok)}#s-cart .note svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round}#s-cart .st{flex:none;width:96px;height:44px;border-radius:999px;background:var(--tile);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:15px;font-weight:800}#s-cart .st.w{width:110px;font-size:13px}#s-cart .st svg{width:16px;height:16px;stroke:var(--ink);fill:none;stroke-width:2.6;stroke-linecap:round}#s-cart .st .del{stroke:var(--brand)}#s-cart .clear{padding:16px 0;text-align:center;font-size:14px;font-weight:700;color:var(--ink-3)}#s-cart .foot{position:absolute;left:0;right:0;bottom:88px;background:#fff;padding:0 16px 12px}#s-cart .promo{display:flex;align-items:center;gap:10px;height:52px;border-top:1px solid var(--line);font-size:15px;font-weight:700}#s-cart .promo .pi{width:32px;height:32px;border-radius:8px;background:var(--brand-lt);color:var(--brand);display:grid;place-items:center}#s-cart .promo .ch{margin-left:auto;color:var(--ink-3)}#s-cart .pay{height:60px;border-radius:999px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:15px;font-weight:800;position:relative;white-space:nowrap;box-shadow:0 8px 24px rgba(200,16,46,.28)}#s-cart .pay .sum{display:flex;gap:6px;align-items:baseline}#s-cart .pay .sum s{font-size:13px;opacity:.7;font-weight:400}#s-cart .pay .bd{position:absolute;right:14px;top:-10px;background:#fff;color:var(--ink);border-radius:999px;padding:3px 8px;font-size:12px;font-weight:800;border:1px solid var(--line)}#s-cart .tabs{position:absolute;left:0;right:0;bottom:0;height:88px;background:#fff;border-top:1px solid var(--line);display:flex;padding:10px 6px 0}#s-cart .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--ink-3);position:relative}#s-cart .tab.on{color:var(--brand)}#s-cart .tab svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}#s-cart .tab.on svg{stroke-width:2.5}#s-cart .cnt{position:absolute;top:-4px;left:calc(50% + 6px);background:var(--brand);color:#fff;font-size:10px;font-weight:800;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;border:2px solid #fff}#s-cart .home{position:absolute;left:50%;bottom:8px;width:134px;height:5px;border-radius:3px;background:var(--ink);transform:translateX(-50%)}
+#s-checkout .screen{height:100%;overflow-y:auto;scrollbar-width:none;padding-bottom:120px}#s-checkout .screen::-webkit-scrollbar{display:none}#s-checkout .status{display:flex;justify-content:space-between;padding:16px 28px 0;font-size:14px;font-weight:700;background:#fff}#s-checkout .top{display:flex;align-items:center;height:56px;padding:0 16px;background:#fff;position:sticky;top:0;z-index:2}#s-checkout .top .b{width:40px;height:40px;display:grid;place-items:center}#s-checkout svg.i{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}#s-checkout .card{background:#fff;border-radius:24px;padding:20px 16px;margin:0 0 8px}#s-checkout .card:first-of-type{border-radius:0 0 24px 24px;padding-top:4px}#s-checkout h1{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-bottom:16px}#s-checkout h2{font-size:18px;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}#s-checkout .row{display:flex;align-items:center;gap:12px;min-height:52px;border-bottom:1px solid var(--line)}#s-checkout .row .ic{width:28px;display:grid;place-items:center;color:var(--brand);flex:none}#s-checkout .row .v{flex:1;font-size:17px}#s-checkout .row .ch{color:var(--ink-3)}#s-checkout .fields{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;margin-left:40px}#s-checkout .f{padding:10px 0 8px;border-bottom:1px solid var(--line)}#s-checkout .f label{display:block;font-size:12px;color:var(--ink-2)}#s-checkout .f .val{font-size:17px;margin-top:2px}#s-checkout .f .ph{font-size:17px;color:var(--ink-3);margin-top:2px}#s-checkout .f.full{grid-column:1/3}#s-checkout .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}#s-checkout .opt{background:var(--tile);border-radius:16px;padding:12px;font-size:13px;font-weight:700;line-height:1.2;display:flex;flex-direction:column;gap:8px;min-height:84px}#s-checkout .opt .tg{margin-top:auto;width:44px;height:26px;border-radius:13px;background:var(--line);position:relative}#s-checkout .opt .tg i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff}#s-checkout .opt .tg.on{background:var(--ink)}#s-checkout .opt .tg.on i{left:21px}#s-checkout .seg{display:flex;flex-direction:column;gap:6px;margin-top:auto}#s-checkout .seg span{font-size:12px;font-weight:400;color:var(--ink-2)}#s-checkout .pay{display:grid;grid-template-columns:1fr 1fr;gap:8px}#s-checkout .pm{border:2px solid transparent;background:var(--tile);border-radius:16px;padding:12px;height:76px;display:flex;flex-direction:column;justify-content:space-between;font-size:14px;font-weight:700}#s-checkout .pm.on{border-color:var(--ink);background:#fff}#s-checkout .pm small{font-size:11px;font-weight:400;color:var(--ink-2)}#s-checkout .pm .h{display:flex;justify-content:space-between;align-items:center}#s-checkout .pm .mir{font-size:11px;font-weight:800;letter-spacing:.04em;color:#1B6C3F}#s-checkout .pm .sbp{font-size:11px;font-weight:800;color:#7B3FE4}#s-checkout .pm svg{width:22px;height:22px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}#s-checkout .sum .l{display:flex;justify-content:space-between;font-size:15px;padding:6px 0;color:var(--ink-2)}#s-checkout .sum .l b{color:var(--ink);font-weight:700}#s-checkout .sum .l.d{color:var(--brand)}#s-checkout .sum .l.d b{color:var(--brand)}#s-checkout .sum .t{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding-top:10px;margin-top:4px;border-top:1px solid var(--line)}#s-checkout .hint{font-size:12px;color:var(--ink-2);margin-top:10px;line-height:1.35}#s-checkout .foot{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 28px;background:#fff;border-top:1px solid var(--line)}#s-checkout .btn{height:60px;border-radius:999px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:15px;font-weight:800;white-space:nowrap;position:relative;box-shadow:0 8px 24px rgba(200,16,46,.28)}#s-checkout .btn s{font-size:13px;opacity:.7;font-weight:400;margin-left:6px}#s-checkout .btn .bd{position:absolute;right:14px;top:-10px;background:#fff;color:var(--ink);border-radius:999px;padding:3px 8px;font-size:12px;font-weight:800;border:1px solid var(--line)}#s-checkout .home{position:absolute;left:50%;bottom:8px;width:134px;height:5px;border-radius:3px;background:var(--ink);transform:translateX(-50%)}
+#s-profile .screen{height:100%;overflow-y:auto;scrollbar-width:none;padding-bottom:110px}#s-profile .screen::-webkit-scrollbar{display:none}#s-profile .status{display:flex;justify-content:space-between;padding:16px 28px 0;font-size:14px;font-weight:700}#s-profile .top{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px}#s-profile .top .b{width:40px;height:40px;display:grid;place-items:center}#s-profile svg.i{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}#s-profile .head{display:flex;align-items:center;gap:14px;padding:4px 16px 0}#s-profile .av{width:64px;height:64px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:24px;font-weight:800;flex:none}#s-profile .nm{font-size:22px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:6px}#s-profile .ph{font-size:14px;color:var(--ink-2);margin-top:2px}#s-profile .loy{margin:20px 16px 0;border-radius:20px;background:var(--ink);color:#fff;padding:16px;display:flex;gap:14px;align-items:center;position:relative;overflow:hidden}#s-profile .loy .qr{width:76px;height:76px;border-radius:12px;background:#fff;display:grid;place-items:center;flex:none}#s-profile .loy .qr svg{width:60px;height:60px}#s-profile .loy .t1{font-size:13px;opacity:.7}#s-profile .loy .t2{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:2px}#s-profile .loy .t3{font-size:12px;opacity:.7;margin-top:6px;line-height:1.3}#s-profile .loy .lv{position:absolute;right:14px;top:14px;background:var(--brand);color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px}#s-profile .grp{margin:16px 16px 0;background:var(--tile);border-radius:20px;overflow:hidden}#s-profile .r{display:flex;align-items:center;gap:14px;height:58px;padding:0 16px;font-size:16px}#s-profile .r+.r{border-top:1px solid #fff}#s-profile .r .ic{width:24px;display:grid;place-items:center;color:var(--ink);flex:none}#s-profile .r .ic svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}#s-profile .r .v{flex:1;line-height:1.2}#s-profile .r .v small{display:block;font-size:12px;color:var(--ink-2);margin-top:1px}#s-profile .r .ch{color:var(--ink-3)}#s-profile .r .cnt{font-size:13px;color:var(--ink-2);margin-right:2px}#s-profile .r .dot{width:8px;height:8px;border-radius:50%;background:var(--brand);margin-right:4px}#s-profile .out{margin:20px 16px 0;text-align:center;font-size:14px;color:var(--ink-3);font-weight:700}#s-profile .ver{text-align:center;font-size:11px;color:var(--ink-3);margin-top:6px}#s-profile .tabs{position:absolute;left:0;right:0;bottom:0;height:88px;background:#fff;border-top:1px solid var(--line);display:flex;padding:10px 6px 0}#s-profile .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--ink-3);position:relative}#s-profile .tab.on{color:var(--brand)}#s-profile .tab svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}#s-profile .tab.on svg{stroke-width:2.5}#s-profile .home{position:absolute;left:50%;bottom:8px;width:134px;height:5px;border-radius:3px;background:var(--ink);transform:translateX(-50%)}
+
+
+  /* glow system: red for actions leading to payment, black for brand cards */
+  :root{--glow-red:0 8px 24px rgba(200,16,46,.30);--glow-red-soft:0 6px 18px rgba(200,16,46,.22);--glow-ink:0 10px 28px rgba(0,0,0,.28);--glow-ink-soft:0 6px 16px rgba(0,0,0,.18)}
+  .scr .cart{box-shadow:var(--glow-ink)}
+  .scr .cart .go{box-shadow:var(--glow-red)}
+  #s-home .bn-1{box-shadow:var(--glow-red-soft)}
+  #s-home .eta{box-shadow:0 4px 12px rgba(200,16,46,.14)}
+  #s-home .price em{box-shadow:0 2px 8px rgba(200,16,46,.30)}
+  #s-catalog .q.sale{box-shadow:var(--glow-red-soft)}
+  #s-catalog .q.own{box-shadow:var(--glow-ink-soft)}
+  #s-catalog .pill.red{box-shadow:0 2px 8px rgba(200,16,46,.18)}
+  #s-kitchen .stk{box-shadow:0 2px 8px rgba(200,16,46,.30)}
+  #s-kitchen .stk.y{box-shadow:0 2px 8px rgba(233,180,76,.40)}
+  #s-kitchen .c.hero{box-shadow:0 8px 24px rgba(200,16,46,.12)}
+  #s-cart .pay{box-shadow:var(--glow-red)}
+  #s-cart .bonus .btn{box-shadow:var(--glow-ink-soft);background:var(--ink);color:#fff}
+  #s-checkout .btn{box-shadow:var(--glow-red)}
+  #s-checkout .pm.on{box-shadow:var(--glow-ink-soft)}
+  #s-profile .loy{box-shadow:var(--glow-ink)}
+  #s-profile .loy .lv{box-shadow:0 2px 10px rgba(200,16,46,.55)}
+  #ok .ck{box-shadow:var(--glow-red)}
+  #ok .b{box-shadow:var(--glow-ink-soft)}
+  .tap:active{transform:scale(.98);transition:transform .08s}
+#s-auth .screen{height:100%;display:flex;flex-direction:column;padding:0 24px 40px}#s-auth .status{display:flex;justify-content:space-between;padding:16px 4px 0;font-size:14px;font-weight:700}#s-auth .logo{width:56px;height:56px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:28px;font-weight:800;margin-top:64px}#s-auth .brand{margin-top:24px;line-height:1}#s-auth .brand .l1{font-size:22px;font-weight:700;letter-spacing:-.01em;color:var(--ink-2);white-space:nowrap;display:inline-block}#s-auth .brand .l2{display:block;font-weight:800;letter-spacing:-.03em;white-space:nowrap;line-height:.95;margin-top:4px;color:var(--ink)}#s-auth .brand .l2 span{display:inline-block;transform-origin:left top}#s-auth .form{margin-top:auto;margin-bottom:auto}#s-auth .lbl{font-size:15px;color:var(--ink-2);margin-bottom:10px}#s-auth .inp{height:56px;border-radius:16px;background:var(--tile);display:flex;align-items:center;padding:0 16px;gap:10px;font-size:20px;font-weight:700;letter-spacing:.02em}#s-auth .inp .cc{color:var(--ink-2);font-weight:700}
+  #s-auth .inp input{flex:1;border:0;outline:0;background:transparent;font:inherit;color:var(--ink);letter-spacing:.02em;min-width:0;caret-color:var(--brand)}
+  #s-auth .inp input::placeholder{color:var(--ink-3);font-weight:500}#s-auth .inp .caret{width:2px;height:24px;background:var(--brand);animation:bl 1s steps(1) infinite}#s-auth .btn{margin-top:14px;height:56px;border-radius:999px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;box-shadow:0 8px 24px rgba(200,16,46,.30);cursor:pointer}#s-auth .btn.dis{background:var(--ink-3);box-shadow:none}#s-auth .hint{margin-top:14px;font-size:12px;color:var(--ink-3);line-height:1.4}#s-auth .hint b{color:var(--ink-2);font-weight:700}#s-auth .code{display:none;margin-top:8px}#s-auth .code .boxes{display:flex;gap:10px}#s-auth .code .bx{flex:1;height:60px;border-radius:14px;background:var(--tile);display:grid;place-items:center;font-size:24px;font-weight:800}#s-auth .code .bx.on{outline:2px solid var(--ink)}
+  #s-auth .code .boxes{position:relative}
+  #s-auth .code #code{position:absolute;inset:0;opacity:0;font-size:24px;border:0;outline:0}
+  #s-auth .code .re.act{color:var(--brand);font-weight:700;cursor:pointer}#s-auth .code .re{margin-top:12px;font-size:13px;color:var(--ink-2)}#s-auth .skip{text-align:center;font-size:14px;font-weight:700;color:var(--ink-2);padding-top:12px;cursor:pointer}#s-auth .home{position:absolute;left:50%;bottom:8px;width:134px;height:5px;border-radius:3px;background:var(--ink);transform:translateX(-50%)}
+
+  @keyframes bl{50%{opacity:0}}
+  #s-auth{background:#fff}
+</style>
+</head>
+<body>
+<div class="phone">
+<section id="s-auth" class="scr">
+<div class="screen">
+  <div class="status"><span>9:41</span><span>4G ▮▮▮ 100%</span></div>
+  <div class="logo">Д</div>
+  <div class="brand">
+    <span class="l1" id="l1">Сеть супермаркетов</span>
+    <span class="l2"><span id="l2">Деликат</span></span>
+  </div>
+
+  <div class="form">
+    <div id="step1">
+      <div class="lbl">Номер телефона</div>
+      <div class="inp"><span class="cc">+7</span><input id="num" type="tel" inputmode="numeric" placeholder="(9__) ___-__-__" autocomplete="tel-national" maxlength="15"></div>
+      <div class="btn dis" id="go">Получить код</div>
+      <div class="hint">Нажимая «Получить код», вы соглашаетесь с <b>условиями использования</b> и <b>политикой конфиденциальности</b>. Код придёт по СМС.</div>
+    </div>
+    <div class="code" id="step2">
+      <div class="lbl">Код из СМС на <span id="shown">+7</span></div>
+      <div class="boxes" id="boxes"><div class="bx on"></div><div class="bx"></div><div class="bx"></div><div class="bx"></div><input id="code" type="tel" inputmode="numeric" maxlength="4" autocomplete="one-time-code"></div>
+      <div class="re" id="re">Отправить ещё раз через 0:59</div>
+      <div class="btn dis" id="authok">Войти</div>
+    </div>
+  </div>
+
+  <div class="skip" id="skip">Посмотреть без входа</div>
+</div>
+<div class="home"></div>
+</section>
+<section id="s-home" class="scr">
+<div class="screen">
+
+  <div class="status"><span>9:41</span><span>4G ▮▮▮ 100%</span></div>
+
+  <div class="pad header">
+    <div class="logo">Д</div>
+    <div>
+      <div class="title">Деликат</div>
+      <div class="addr"><span>ул. Ленина, 14, кв. 7</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+      </div>
+    </div>
+    <div class="eta">25–35 мин</div>
+  </div>
+
+  <div class="pad search">
+    <div class="field">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      Найти в Деликате
+    </div>
+    <div class="scan"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M7 9v6M11 9v6M14 9v6M17 9v6"/></svg></div>
+  </div>
+
+  <div class="pad">
+    <div class="banners">
+      <div class="bn bn-1">−20% на первый заказ<small>промокод ДЕЛИКАТ</small><span class="pct">%</span></div>
+      <div class="bn bn-2">Мясо к субботе<small>закажите до пятницы</small>
+        <svg class="truck" viewBox="0 0 64 40" fill="none"><rect x="2" y="8" width="36" height="22" rx="3" fill="#fff" opacity=".9"/><path d="M38 14h12l8 8v8H38z" fill="#fff" opacity=".7"/><circle cx="14" cy="32" r="5" fill="#C8102E"/><circle cx="48" cy="32" r="5" fill="#C8102E"/></svg>
+      </div>
+      <div class="bn bn-3">Пироги из нашей пекарни<small>испечём к вашему времени</small>
+        <svg class="stack" viewBox="0 0 150 104" fill="none">
+          <rect x="6" y="40" width="44" height="60" rx="8" fill="#C8102E"/>
+          <rect x="14" y="48" width="28" height="10" rx="3" fill="#FBE9EC"/>
+          <rect x="56" y="18" width="38" height="82" rx="19" fill="#111111"/>
+          <rect x="66" y="46" width="18" height="30" rx="4" fill="#E7E6E1"/>
+          <rect x="100" y="56" width="46" height="44" rx="8" fill="#D85A30"/>
+          <circle cx="123" cy="78" r="10" fill="#F5C4B3"/>
+        </svg>
+      </div>
+    </div>
+    <div class="dots"><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="row cats">
+    <div class="cat"><div class="ic"><svg viewBox="0 0 32 32" fill="none"><path d="M6 20c0-7 5-12 12-12 5 0 8 3 8 7 0 6-6 9-12 9H9a3 3 0 01-3-3z" fill="#E86A7C" stroke="#9E0B23" stroke-width="1.8"/><path d="M20 12l6-4" stroke="#9E0B23" stroke-width="2" stroke-linecap="round"/></svg></div>Мясо</div>
+    <div class="cat"><div class="ic"><svg viewBox="0 0 32 32" fill="none"><rect x="4" y="12" width="24" height="9" rx="4.5" fill="#E86A7C" stroke="#9E0B23" stroke-width="1.8"/><path d="M4 16h-2M30 16h-2" stroke="#9E0B23" stroke-width="2" stroke-linecap="round"/></svg></div>Колбасы</div>
+    <div class="cat"><div class="ic"><svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="11" fill="#FAC775" stroke="#854F0B" stroke-width="1.8"/><path d="M16 5v22M5 16h22M8 8l16 16M24 8L8 24" stroke="#854F0B" stroke-width="1.4"/></svg></div>Пироги</div>
+    <div class="cat"><div class="ic"><svg viewBox="0 0 32 32" fill="none"><path d="M9 12l7-7 7 7v14H9z" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="1.8"/><path d="M13 16h6M13 20h6" stroke="#5F5E5A" stroke-width="1.8" stroke-linecap="round"/></svg></div>Молочное</div>
+    <div class="cat"><div class="ic"><svg viewBox="0 0 32 32" fill="none"><rect x="6" y="8" width="20" height="16" rx="3" fill="#B5D4F4" stroke="#185FA5" stroke-width="1.8"/><path d="M10 13l4 4-4 4M16 21h6" stroke="#185FA5" stroke-width="1.8" stroke-linecap="round"/></svg></div>Заморозка</div>
+    <div class="cat"><div class="ic"><svg viewBox="0 0 32 32" fill="none"><path d="M12 3h8v5l3 4v15a2 2 0 01-2 2H11a2 2 0 01-2-2V12l3-4z" fill="#F3F2EE" stroke="#111" stroke-width="1.8"/><rect x="11" y="15" width="10" height="8" rx="1.5" fill="#C8102E"/></svg></div>Напитки</div>
+  </div>
+
+  <div class="row chips">
+    <div class="chip on"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0114-5M20 12a8 8 0 01-14 5"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>Уже брали</div>
+    <div class="chip"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z"/></svg>Любимое</div>
+    <div class="chip sale"><svg viewBox="0 0 24 24"><path d="M5 19L19 5M7 7h.01M17 17h.01"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="17" r="2"/></svg>Скидки</div>
+    <div class="chip"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 6 6.5.5-5 4.3 1.6 6.2L12 16.5 6.4 20l1.6-6.2-5-4.3 6.5-.5z"/></svg>Новинки</div>
+  </div>
+
+  <div class="pad sec"><h2>Выгодно сегодня</h2><a href="#">Все 48</a></div>
+
+  <div class="pad grid">
+    <div>
+      <div class="tile">
+        <svg viewBox="0 0 120 130" fill="none"><rect x="12" y="40" width="96" height="62" rx="8" fill="#F7F5F0" stroke="#D9D6CE" stroke-width="2"/><path d="M26 58c6-12 20-16 34-14 16 2 28 10 26 24-2 12-14 18-30 18-18 0-34-10-30-28z" fill="#C8102E"/><path d="M40 60c8-6 22-6 30 0" stroke="#F7B7C1" stroke-width="3" stroke-linecap="round"/><path d="M36 74c10 6 26 6 36 0" stroke="#F7B7C1" stroke-width="3" stroke-linecap="round"/></svg>
+        <div class="plus"></div>
+      </div>
+      <div class="price"><b class="sale">689 ₽</b><s>790 ₽</s><em>−13%</em></div>
+      <div class="name">Говядина охлаждённая, лопатка, своё производство</div>
+      <div class="w">1 кг</div>
+    </div>
+    <div>
+      <div class="tile">
+        <svg viewBox="0 0 120 130" fill="none"><circle cx="60" cy="68" r="44" fill="#E9B44C"/><circle cx="60" cy="68" r="34" fill="#F3CB70"/><path d="M60 24v88M16 68h88M29 37l62 62M91 37L29 99" stroke="#C48A2A" stroke-width="2"/><circle cx="60" cy="68" r="6" fill="#C48A2A"/></svg>
+        <div class="plus"></div>
+      </div>
+      <div class="price"><b>450 ₽</b></div>
+      <div class="name">Пирог осетинский с мясом, Фыдджын</div>
+      <div class="w">1 000 г</div>
+    </div>
+    <div>
+      <div class="tile">
+        <svg viewBox="0 0 120 130" fill="none"><path d="M22 40c-8 0-8 12 0 12h76c8 0 8-12 0-12z" fill="#7A2E2E"/><path d="M18 46c0-8 6-12 14-10l56 4c8 2 12 8 12 16v10c0 8-6 12-14 12H30c-8 0-12-4-12-12z" fill="#9E3B3B"/><path d="M28 56h60" stroke="#C97F7F" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 6"/><path d="M14 46h-6M112 60h6" stroke="#5A2020" stroke-width="3" stroke-linecap="round"/></svg>
+        <div class="plus"></div>
+      </div>
+      <div class="price"><b class="sale">520 ₽</b><s>590 ₽</s><em>−12%</em></div>
+      <div class="name">Колбаса домашняя, свинина и говядина</div>
+      <div class="w">1 кг</div>
+    </div>
+    <div>
+      <div class="tile">
+        <svg viewBox="0 0 120 130" fill="none"><path d="M42 20h36l8 18v76a6 6 0 01-6 6H40a6 6 0 01-6-6V38z" fill="#fff" stroke="#D9D6CE" stroke-width="2"/><rect x="44" y="52" width="32" height="40" rx="4" fill="#C8102E"/><text x="60" y="76" font-family="Manrope" font-size="9" font-weight="800" text-anchor="middle" fill="#fff">ДЕЛИКАТ</text><rect x="48" y="20" width="24" height="8" rx="2" fill="#111"/></svg>
+        <div class="plus"></div>
+      </div>
+      <div class="price"><b>95 ₽</b></div>
+      <div class="name">Молоко пастеризованное 3,2%, молзавод Деликат</div>
+      <div class="w">1 л</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="cart"><span class="n">3</span>1 659 ₽<span class="go">Оформить</span></div>
+
+<div class="tabs">
+  <div class="tab on"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Главная</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Каталог</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 15a9 9 0 0118 0z"/><path d="M12 6V4M3 19h18"/></svg>Кухня</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h11L21 7H6"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg>Корзина</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg>Профиль</div>
+  <div class="home"></div>
+</div>
+</section><section id="s-catalog" class="scr">
+<div class="screen">
+  <div class="status"><span>9:41</span><span>4G ▮▮▮ 100%</span></div>
+
+  <div class="pad top">
+    <div class="b"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></div>
+    <div class="t">Каталог</div>
+    <div class="b"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+  </div>
+
+  <div class="row quick">
+    <div class="q sale">Скидки<br>недели<svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="22" fill="rgba(255,255,255,.18)"/><path d="M16 36L36 16" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><circle cx="18" cy="18" r="4" fill="#fff"/><circle cx="34" cy="34" r="4" fill="#fff"/></svg></div>
+    <div class="q own">Своё<br>производство<svg viewBox="0 0 52 52" fill="none"><path d="M8 32c0-10 8-16 18-14 10 2 18 8 16 18-2 8-10 12-20 12S8 42 8 32z" fill="#C8102E"/><path d="M18 30c6-4 14-4 20 0" stroke="#F7B7C1" stroke-width="3" stroke-linecap="round"/></svg></div>
+    <div class="q">Новинки<svg viewBox="0 0 52 52" fill="none"><path d="M26 6l6 14 15 1-11 10 4 15-14-8-14 8 4-15L5 21l15-1z" fill="#FAC775"/></svg></div>
+    <div class="q">Уже брали<svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="18" stroke="#B4B2A9" stroke-width="4"/><path d="M26 14v12l8 5" stroke="#B4B2A9" stroke-width="4" stroke-linecap="round"/></svg></div>
+  </div>
+
+  <h2>Мясной прилавок</h2>
+  <div class="g wn sec-rose">
+    <div class="c"><b>Мясо</b><span>говядина, баранина, птица, свинина</span>
+      <svg viewBox="0 0 78 78" fill="none"><path d="M10 46c0-14 12-22 26-20 16 2 30 10 28 26-2 12-14 18-30 18S10 60 10 46z" fill="#C8102E"/><path d="M26 42c8-6 22-6 30 0" stroke="#F7B7C1" stroke-width="3.5" stroke-linecap="round"/><path d="M22 56c10 6 28 6 38 0" stroke="#F7B7C1" stroke-width="3.5" stroke-linecap="round"/></svg>
+      <div class="pill red">от 450 ₽/кг</div></div>
+    <div class="c"><b>Колбасы</b><span>домашние</span>
+      <svg viewBox="0 0 78 78" fill="none"><path d="M12 40c0-8 6-12 14-10l40 4c8 2 10 8 10 14v6c0 8-6 12-14 12H26c-8 0-14-4-14-12z" fill="#9E3B3B"/><path d="M24 50h40" stroke="#C97F7F" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="3 6"/></svg></div>
+  </div>
+  <div class="g eee sec-rose">
+    <div class="c"><b>Полуфаб­рикаты</b><span>пельмени, котлеты</span>
+      <svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="36" r="12" fill="#F1E7DA" stroke="#D3C3A6" stroke-width="2"/><circle cx="46" cy="30" r="10" fill="#F1E7DA" stroke="#D3C3A6" stroke-width="2"/><circle cx="42" cy="48" r="9" fill="#F1E7DA" stroke="#D3C3A6" stroke-width="2"/></svg></div>
+    <div class="c"><b>Готовая кухня</b><span>салаты, холодное</span>
+      <svg viewBox="0 0 60 60" fill="none"><circle cx="36" cy="38" r="20" fill="#fff"/><circle cx="36" cy="38" r="13" fill="#639922"/><circle cx="31" cy="34" r="4" fill="#D85A30"/></svg></div>
+    <div class="c"><b>Пироги</b><span>осетинские</span>
+      <svg viewBox="0 0 60 60" fill="none"><circle cx="34" cy="34" r="26" fill="#E9B44C"/><path d="M34 8v52M8 34h52M16 16l36 36M52 16L16 52" stroke="#C48A2A" stroke-width="2"/></svg></div>
+  </div>
+
+  <h2>Молочный прилавок</h2>
+  <div class="g wn sec-sky">
+    <div class="c"><b>Молоко, кефир, сметана</b><span>масло, сливки</span>
+      <svg viewBox="0 0 78 78" fill="none"><path d="M34 12h18l7 12v40a4 4 0 01-4 4H31a4 4 0 01-4-4V24z" fill="#fff" stroke="#D9D6CE" stroke-width="2"/><rect x="34" y="34" width="18" height="20" rx="3" fill="#C8102E"/><ellipse cx="18" cy="56" rx="12" ry="8" fill="#fff" stroke="#D9D6CE" stroke-width="2"/></svg></div>
+    <div class="c"><b>Сыры</b><span>и масло</span>
+      <svg viewBox="0 0 78 78" fill="none"><path d="M12 56l30-26 30 10v16H12z" fill="#F3CB70"/><circle cx="36" cy="48" r="4" fill="#E0AE45"/><circle cx="52" cy="54" r="3" fill="#E0AE45"/></svg></div>
+  </div>
+  <div class="g ee sec-sky">
+    <div class="c"><b>Творог и йогурты</b><span>десерты, сырки</span>
+      <svg viewBox="0 0 78 78" fill="none"><path d="M22 34h34l-4 30H26z" fill="#fff" stroke="#D9D6CE" stroke-width="2"/><rect x="20" y="28" width="38" height="8" rx="3" fill="#C8102E"/></svg></div>
+    <div class="c"><b>Яйца</b><span>куриные, перепелиные</span>
+      <svg viewBox="0 0 78 78" fill="none"><ellipse cx="30" cy="52" rx="12" ry="15" fill="#fff" stroke="#D9D6CE" stroke-width="2"/><ellipse cx="54" cy="48" rx="12" ry="15" fill="#E9C7A0" stroke="#D3B08A" stroke-width="2"/></svg></div>
+  </div>
+
+  <h2>Овощной прилавок</h2>
+  <div class="g ee sec-sage">
+    <div class="c"><b>Овощи и зелень</b>
+      <svg viewBox="0 0 78 78" fill="none"><circle cx="40" cy="50" r="18" fill="#D85A30"/><path d="M40 32c2-8 8-10 12-10" stroke="#3B6D11" stroke-width="3" stroke-linecap="round"/><ellipse cx="62" cy="52" rx="8" ry="16" fill="#639922"/></svg></div>
+    <div class="c"><b>Фрукты и сухофрукты</b>
+      <svg viewBox="0 0 78 78" fill="none"><circle cx="40" cy="50" r="16" fill="#E24B4A"/><path d="M56 26c-6 10-4 26 6 34" stroke="#EF9F27" stroke-width="10" stroke-linecap="round"/></svg></div>
+  </div>
+
+  <h2>Булочная</h2>
+  <div class="g ee sec-cream">
+    <div class="c"><b>Хлеб</b><span>и лепёшки</span>
+      <svg viewBox="0 0 78 78" fill="none"><path d="M10 44c0-14 12-22 28-22s28 8 28 22v10a6 6 0 01-6 6H16a6 6 0 01-6-6z" fill="#E9B44C"/><path d="M22 40l6-6M34 38l6-6M46 40l6-6" stroke="#B57A1C" stroke-width="3" stroke-linecap="round"/></svg></div>
+    <div class="c"><b>Выпечка</b><span>и кондитерка</span>
+      <svg viewBox="0 0 78 78" fill="none"><path d="M18 60c0-12 10-26 22-30 12 4 22 18 22 30z" fill="#D9A15B"/><path d="M40 30v30" stroke="#B57A1C" stroke-width="2"/></svg></div>
+  </div>
+
+  <h2>Бакалея и напитки</h2>
+  <div class="g wn sec-stone">
+    <div class="c"><b>Бакалея</b><span>крупы, макароны, масло, специи</span>
+      <svg viewBox="0 0 78 78" fill="none"><rect x="30" y="20" width="34" height="46" rx="6" fill="#D7B48A"/><rect x="38" y="32" width="18" height="10" rx="2" fill="#FFF6E9"/><rect x="14" y="36" width="18" height="30" rx="4" fill="#fff" stroke="#D9D6CE" stroke-width="2"/></svg></div>
+    <div class="c"><b>Кофе и чай</b><span>какао</span>
+      <svg viewBox="0 0 78 78" fill="none"><path d="M22 30h34v18a12 12 0 01-12 12h-10a12 12 0 01-12-12z" fill="#6B3A2A"/><path d="M56 36h6a5 5 0 010 10h-6" stroke="#6B3A2A" stroke-width="3"/></svg></div>
+  </div>
+  <div class="g eee sec-stone">
+    <div class="c"><b>Напитки</b><span>вода, соки</span>
+      <svg viewBox="0 0 60 60" fill="none"><path d="M26 10h14l5 12v32a4 4 0 01-4 4H25a4 4 0 01-4-4V22z" fill="#B5D4F4"/><rect x="28" y="30" width="10" height="16" rx="2" fill="#fff"/></svg></div>
+    <div class="c"><b>Соусы</b><span>консервы</span>
+      <svg viewBox="0 0 60 60" fill="none"><rect x="18" y="18" width="30" height="36" rx="7" fill="#fff" stroke="#D9D6CE" stroke-width="2"/><rect x="16" y="12" width="34" height="9" rx="3" fill="#111"/><rect x="24" y="30" width="18" height="14" rx="2" fill="#C8102E"/></svg></div>
+    <div class="c"><b>Бытовая химия</b><span>уборка</span>
+      <svg viewBox="0 0 60 60" fill="none"><rect x="22" y="18" width="26" height="40" rx="6" fill="#fff" stroke="#D9D6CE" stroke-width="2"/><rect x="28" y="10" width="14" height="10" rx="3" fill="#378ADD"/><rect x="28" y="32" width="14" height="12" rx="2" fill="#378ADD"/></svg></div>
+  </div>
+</div>
+<div class="up"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></div>
+
+<div class="cart"><span class="n">3</span>1 659 ₽<span class="go">Оформить</span></div>
+<div class="tabs">
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Главная</div>
+  <div class="tab on"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Каталог</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 15a9 9 0 0118 0z"/><path d="M12 6V4M3 19h18"/></svg>Кухня</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h11L21 7H6"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg>Корзина</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg>Профиль</div>
+  <div class="home"></div>
+</div>
+</section><section id="s-kitchen" class="scr">
+<div class="screen">
+  <div class="status"><span>9:41</span><span>4G ▮▮▮ 100%</span></div>
+  <div class="top">
+    <div class="b"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></div>
+    <div class="ttl">Готовая кухня</div>
+    <div class="b"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+  </div>
+
+  <div class="g eee" style="margin-top:8px">
+    <div class="c"><b>Скидки</b>
+      <svg viewBox="0 0 64 64" fill="none"><circle cx="36" cy="36" r="22" fill="#fff"/><path d="M26 42c4-8 12-10 20-8" stroke="#D85A30" stroke-width="5" stroke-linecap="round"/></svg>
+      <div class="stk">−20%</div></div>
+    <div class="c"><b>Новинки</b>
+      <svg viewBox="0 0 64 64" fill="none"><circle cx="36" cy="36" r="22" fill="#fff"/><circle cx="36" cy="36" r="13" fill="#D85A30"/><circle cx="32" cy="32" r="4" fill="#639922"/></svg>
+      <div class="stk y">новое</div></div>
+    <div class="c"><b>Наборы к столу</b>
+      <svg viewBox="0 0 64 64" fill="none"><rect x="14" y="26" width="40" height="30" rx="6" fill="#fff"/><rect x="18" y="32" width="14" height="10" rx="2" fill="#E9B44C"/><rect x="36" y="32" width="14" height="10" rx="2" fill="#C8102E"/><rect x="18" y="44" width="32" height="8" rx="2" fill="#639922"/></svg>
+      <div class="stk" style="background:#111">от 3 чел.</div></div>
+  </div>
+
+  <h2>Пироги из нашей пекарни</h2>
+  <div class="g one">
+    <div class="c hero"><b>Осетинские пироги</b><span>с мясом, сыром, картофелем, свекольными листьями, тыквой</span>
+      <svg viewBox="0 0 150 150" fill="none"><circle cx="80" cy="80" r="62" fill="#E9B44C"/><circle cx="80" cy="80" r="52" fill="#F3CB70"/><path d="M80 18v124M18 80h124M36 36l88 88M124 36L36 124" stroke="#C48A2A" stroke-width="2.5"/><circle cx="80" cy="80" r="8" fill="#C48A2A"/></svg>
+      <div class="t"><i></i>печём 40 мин · от 450 ₽</div></div>
+  </div>
+  <div class="g eee pies">
+    <div class="c"><b>Фыдджын</b><span>с мясом</span><svg viewBox="0 0 64 64" fill="none"><circle cx="38" cy="38" r="24" fill="#E9B44C"/><circle cx="38" cy="38" r="16" fill="#9E3B3B"/></svg></div>
+    <div class="c"><b>Уалибах</b><span>с сыром</span><svg viewBox="0 0 64 64" fill="none"><circle cx="38" cy="38" r="24" fill="#E9B44C"/><circle cx="38" cy="38" r="16" fill="#FBF1D9"/></svg></div>
+    <div class="c"><b>Цахараджын</b><span>свекольная ботва</span><svg viewBox="0 0 64 64" fill="none"><circle cx="38" cy="38" r="24" fill="#E9B44C"/><circle cx="38" cy="38" r="16" fill="#3B6D11"/></svg></div>
+  </div>
+
+  <h2>Меню</h2>
+  <div class="g eee sec-cream">
+    <div class="c"><b>Салаты</b><span>от 15 мин</span><svg viewBox="0 0 64 64" fill="none"><circle cx="38" cy="38" r="22" fill="#fff"/><circle cx="38" cy="38" r="14" fill="#639922"/><circle cx="33" cy="34" r="4" fill="#D85A30"/></svg></div>
+    <div class="c"><b>Горячее</b><span>от 30 мин</span><svg viewBox="0 0 64 64" fill="none"><circle cx="38" cy="38" r="22" fill="#fff"/><path d="M26 40c4-10 20-10 24 0" fill="#9E3B3B"/><circle cx="46" cy="30" r="6" fill="#E9B44C"/></svg></div>
+    <div class="c"><b>Шашлык и мангал</b><span>от 40 мин</span><svg viewBox="0 0 64 64" fill="none"><path d="M18 46L50 14" stroke="#5F5E5A" stroke-width="3" stroke-linecap="round"/><rect x="24" y="30" width="12" height="12" rx="3" transform="rotate(-45 30 36)" fill="#9E3B3B"/><rect x="36" y="18" width="12" height="12" rx="3" transform="rotate(-45 42 24)" fill="#C8102E"/></svg></div>
+  </div>
+  <div class="g eee sec-cream">
+    <div class="c"><b>Холодные закуски</b><span>нарезки, соленья</span><svg viewBox="0 0 64 64" fill="none"><circle cx="38" cy="38" r="22" fill="#fff"/><ellipse cx="32" cy="38" rx="9" ry="6" fill="#9E3B3B"/><ellipse cx="46" cy="40" rx="8" ry="5" fill="#F3CB70"/></svg></div>
+    <div class="c"><b>Выпечка и десерты</b><span>сладкое</span><svg viewBox="0 0 64 64" fill="none"><path d="M20 52c0-10 8-22 18-26 10 4 18 16 18 26z" fill="#D9A15B"/><circle cx="38" cy="30" r="5" fill="#C8102E"/></svg></div>
+    <div class="c"><b>Напитки</b><span>компот, айран</span><svg viewBox="0 0 64 64" fill="none"><path d="M30 16h14l4 10v28a4 4 0 01-4 4H30a4 4 0 01-4-4V26z" fill="#fff" stroke="#D9D6CE" stroke-width="2"/><rect x="30" y="34" width="14" height="16" rx="2" fill="#D85A30"/></svg></div>
+  </div>
+
+  <h2>По поводу</h2>
+  <div class="g eee sec-sage">
+    <div class="c"><b>К празднику</b><span>стол на 8–20 чел.</span><svg viewBox="0 0 64 64" fill="none"><rect x="16" y="30" width="36" height="24" rx="4" fill="#fff"/><circle cx="26" cy="42" r="5" fill="#E9B44C"/><circle cx="42" cy="42" r="5" fill="#C8102E"/></svg></div>
+    <div class="c"><b>Поминальный стол</b><span>соберём за 3 часа</span><svg viewBox="0 0 64 64" fill="none"><circle cx="38" cy="40" r="20" fill="#E9B44C"/><circle cx="38" cy="40" r="13" fill="#F3CB70"/><path d="M38 20v40M18 40h40" stroke="#C48A2A" stroke-width="2"/></svg></div>
+    <div class="c"><b>На компанию</b><span>пироги + мангал</span><svg viewBox="0 0 64 64" fill="none"><circle cx="30" cy="40" r="14" fill="#E9B44C"/><rect x="40" y="24" width="12" height="12" rx="3" transform="rotate(-45 46 30)" fill="#9E3B3B"/></svg></div>
+  </div>
+  <div class="g eee sec-sage">
+    <div class="c"><b>Обед в офис</b><span>от 5 порций</span><svg viewBox="0 0 64 64" fill="none"><rect x="18" y="26" width="30" height="26" rx="5" fill="#fff"/><rect x="24" y="34" width="18" height="4" rx="2" fill="#639922"/><rect x="24" y="42" width="18" height="4" rx="2" fill="#D85A30"/></svg></div>
+    <div class="c"><b>Популярное</b><span>берут чаще всего</span><svg viewBox="0 0 64 64" fill="none"><path d="M36 14l6 14 15 1-11 10 4 15-14-8-14 8 4-15-11-10 15-1z" fill="#E9B44C"/></svg></div>
+    <div class="c"><b>Постное</b><span>без мяса</span><svg viewBox="0 0 64 64" fill="none"><ellipse cx="38" cy="42" rx="12" ry="18" fill="#639922"/><path d="M38 24v36" stroke="#3B6D11" stroke-width="2"/></svg></div>
+  </div>
+</div>
+<div class="up"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></div>
+<div class="cart"><span class="n">3</span>1 659 ₽<span class="go">Оформить</span></div>
+<div class="tabs">
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Главная</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Каталог</div>
+  <div class="tab on"><svg viewBox="0 0 24 24"><path d="M3 15a9 9 0 0118 0z"/><path d="M12 6V4M3 19h18"/></svg>Кухня</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h11L21 7H6"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg>Корзина</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg>Профиль</div>
+  <div class="home"></div>
+</div>
+</section><section id="s-cart" class="scr">
+<div class="screen">
+  <div class="status"><span>9:41</span><span>4G ▮▮▮ 100%</span></div>
+  <div class="top">
+    <div class="b"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></div>
+    <div class="ttl">Корзина</div>
+    <div class="b"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+  </div>
+
+  <div class="pad">
+    <div class="slot">
+      <div><div class="h">Сегодня, 18:00–19:00</div><div class="s">Доставка 150 ₽ · ул. Ленина, 14</div></div>
+      <div class="chev"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
+    </div>
+    <div class="chips"><div class="chip on">18–19</div><div class="chip">19–20</div><div class="chip">20–21</div><div class="chip">Завтра</div></div>
+
+    <div class="free">
+      <div class="l">До бесплатной доставки <span>ещё 341 ₽</span></div>
+      <div class="bar"><i></i></div>
+    </div>
+
+    <div class="bonus">
+      <div class="ic">+83</div>
+      <div class="t">83 бонуса после доставки<span>5% от суммы, спишете со следующего заказа</span></div>
+      <div class="btn">Списать 240</div>
+    </div>
+
+    <div class="item">
+      <div class="ph"><span class="our">НАШЕ</span><svg viewBox="0 0 48 48" fill="none"><path d="M8 28c0-9 8-14 17-13 10 1 18 6 17 16-1 8-9 11-19 11S8 36 8 28z" fill="#C8102E"/><path d="M18 26c5-4 14-4 19 0" stroke="#F7B7C1" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+      <div class="inf"><div class="nm">Говядина охлаждённая, лопатка</div>
+        <div class="pr"><b class="s">826 ₽</b><s>948 ₽</s></div><div class="pr" style="margin-top:0"><em>689 ₽/кг</em></div>
+        <div class="note">взвесим точно, сумма изменится на ±5%</div></div>
+      <div class="st w"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>1,2 кг<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+    </div>
+
+    <div class="item">
+      <div class="ph"><span class="our">НАШЕ</span><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" fill="#E9B44C"/><circle cx="24" cy="24" r="12" fill="#9E3B3B"/></svg></div>
+      <div class="inf"><div class="nm">Фыдджын с мясом, 35 см</div>
+        <div class="pr"><b>450 ₽</b><em>· 1 000 г</em></div>
+        <div class="note ok"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>испечём к 18:00</div></div>
+      <div class="st"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>1<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+    </div>
+
+    <div class="item">
+      <div class="ph"><svg viewBox="0 0 48 48" fill="none"><path d="M17 8h14l5 8v22a3 3 0 01-3 3H15a3 3 0 01-3-3V16z" fill="#B5D4F4"/><rect x="19" y="22" width="10" height="12" rx="2" fill="#fff"/></svg></div>
+      <div class="inf"><div class="nm">Вода минеральная газированная, 0,5 л</div>
+        <div class="pr"><b class="s">138 ₽</b><s>160 ₽</s><em>69 ₽/шт</em></div></div>
+      <div class="st"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>2<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+    </div>
+
+    <div class="item">
+      <div class="ph"><span class="our">НАШЕ</span><svg viewBox="0 0 48 48" fill="none"><path d="M18 6h12l5 8v26a3 3 0 01-3 3H16a3 3 0 01-3-3V14z" fill="#fff" stroke="#D9D6CE" stroke-width="1.5"/><rect x="18" y="20" width="12" height="14" rx="2" fill="#C8102E"/></svg></div>
+      <div class="inf"><div class="nm">Молоко пастеризованное 3,2%, 1 л</div>
+        <div class="pr"><b>95 ₽</b></div></div>
+      <div class="st"><svg class="del" viewBox="0 0 24 24"><path d="M6 7h12M9 7V5h6v2M8 7l1 12h6l1-12"/></svg>1<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+    </div>
+
+    <div class="clear">Очистить корзину</div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="promo"><div class="pi"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M5 19L19 5"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="17" r="2"/></svg></div>Промокод −20% применён<div class="ch"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div></div>
+  <div class="pay"><span>18:00–19:00</span><span>К оплате</span><span class="sum">1 509 ₽ <s>1 659 ₽</s></span><span class="bd">+83</span></div>
+</div>
+
+<div class="tabs">
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Главная</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Каталог</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 15a9 9 0 0118 0z"/><path d="M12 6V4M3 19h18"/></svg>Кухня</div>
+  <div class="tab on"><span class="cnt">4</span><svg viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h11L21 7H6"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg>Корзина</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg>Профиль</div>
+  <div class="home"></div>
+</div>
+</section><section id="s-checkout" class="scr">
+<div class="screen">
+  <div class="status"><span>9:41</span><span>4G ▮▮▮ 100%</span></div>
+  <div class="top"><div class="b"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></div></div>
+
+  <div class="card">
+    <h1>Адрес и получатель</h1>
+    <div class="row"><div class="ic"><svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M12 21s-6-5.5-6-11a6 6 0 0112 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg></div><div class="v">ул. Ленина, 14</div><div class="ch"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div></div>
+    <div class="fields">
+      <div class="f"><label>Квартира</label><div class="val">7</div></div>
+      <div class="f"><label>Домофон</label><div class="ph">Код</div></div>
+      <div class="f"><label>Подъезд</label><div class="val">1</div></div>
+      <div class="f"><label>Этаж</label><div class="val">3</div></div>
+      <div class="f full"><label>Телефон получателя</label><div class="val">+7 928 ··· ·· 41 · Алан</div></div>
+    </div>
+    <div class="row" style="margin-left:0;margin-top:4px"><div class="ic"><svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M4 5h16v11H8l-4 4z"/></svg></div><div class="v" style="color:var(--ink-3)">Комментарий курьеру</div></div>
+
+    <div class="opts">
+      <div class="opt">Оставить у двери<div class="tg"><i></i></div></div>
+      <div class="opt">Если товара нет<div class="seg"><span>✓ позвонить и предложить замену</span></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Доставка</h2>
+    <div class="row" style="border:0;min-height:44px"><div class="ic"><svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div class="v"><b>Сегодня, 18:00–19:00</b><br><span style="font-size:13px;color:var(--ink-2)">пирог испечём к слоту · мясо взвесим перед выездом</span></div><div class="ch"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Способ оплаты</h2>
+    <div class="pay">
+      <div class="pm on"><div class="h"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><span class="mir">MIR</span></div>·· 8445</div>
+      <div class="pm"><div class="h"><svg viewBox="0 0 24 24"><path d="M4 12l4-6h8l4 6-4 6H8z"/></svg><span class="sbp">СБП</span></div>По QR<small>без комиссии</small></div>
+      <div class="pm"><div class="h"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg></div>Наличными<small>сдача с 5 000 ₽</small></div>
+      <div class="pm"><div class="h"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></div>Терминал<small>курьер привезёт</small></div>
+    </div>
+  </div>
+
+  <div class="card sum">
+    <h2>Итого</h2>
+    <div class="l">Товары, 4 позиции<b>1 659 ₽</b></div>
+    <div class="l d">Промокод ДЕЛИКАТ −20%<b>−150 ₽</b></div>
+    <div class="l">Доставка<b>150 ₽</b></div>
+    <div class="l">Бонусы<b>не списываем</b></div>
+    <div class="t"><span>К оплате</span><span>1 659 ₽</span></div>
+    <div class="hint">Говядина — весовой товар. Заблокируем 867 ₽ с запасом 5%, спишем по факту взвешивания. Разницу вернём на карту в день доставки.</div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="btn"><span>18:00–19:00</span><span>Оплатить</span><span>1 659 ₽<s>1 809 ₽</s></span><span class="bd">+83</span></div>
+  <div class="home"></div>
+</div>
+</section><section id="s-profile" class="scr">
+<div class="screen">
+  <div class="status"><span>9:41</span><span>4G ▮▮▮ 100%</span></div>
+  <div class="top">
+    <div class="b"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></div>
+    <div class="b"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></div>
+  </div>
+
+  <div class="head">
+    <div class="av">А</div>
+    <div><div class="nm">Алан <svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--ink-3)"><path d="M9 6l6 6-6 6"/></svg></div><div class="ph">+7 928 ··· ·· 41</div></div>
+  </div>
+
+  <div class="loy">
+    <div class="qr"><svg viewBox="0 0 60 60" fill="#111"><rect x="2" y="2" width="16" height="16" rx="2"/><rect x="6" y="6" width="8" height="8" fill="#fff"/><rect x="42" y="2" width="16" height="16" rx="2"/><rect x="46" y="6" width="8" height="8" fill="#fff"/><rect x="2" y="42" width="16" height="16" rx="2"/><rect x="6" y="46" width="8" height="8" fill="#fff"/><rect x="24" y="4" width="4" height="4"/><rect x="32" y="4" width="4" height="4"/><rect x="24" y="12" width="4" height="4"/><rect x="28" y="16" width="4" height="4"/><rect x="36" y="12" width="4" height="4"/><rect x="4" y="24" width="4" height="4"/><rect x="12" y="24" width="4" height="4"/><rect x="8" y="32" width="4" height="4"/><rect x="16" y="32" width="4" height="4"/><rect x="24" y="24" width="8" height="8"/><rect x="36" y="24" width="4" height="4"/><rect x="44" y="24" width="4" height="4"/><rect x="52" y="28" width="4" height="4"/><rect x="40" y="32" width="8" height="4"/><rect x="24" y="36" width="4" height="4"/><rect x="32" y="40" width="4" height="4"/><rect x="24" y="44" width="8" height="4"/><rect x="40" y="44" width="4" height="4"/><rect x="48" y="40" width="4" height="8"/><rect x="24" y="52" width="4" height="4"/><rect x="32" y="52" width="8" height="4"/><rect x="44" y="52" width="4" height="4"/><rect x="52" y="52" width="4" height="4"/></svg></div>
+    <div><div class="t1">Бонусы</div><div class="t2">1 240 ₽</div><div class="t3">QR на кассе — спишем до 30% чека. До уровня 7% ещё 1 760 ₽</div></div>
+    <span class="lv">5%</span>
+  </div>
+
+  <div class="grp">
+    <div class="r"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7h16v11H8l-4 4z"/></svg></div><div class="v">Заказы<small>Сегодня, 18:00–19:00 — собираем</small></div><span class="dot"></span><div class="ch"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div></div>
+    <div class="r"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0114-5M20 12a8 8 0 01-14 5"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></div><div class="v">Вы покупали</div><span class="cnt">48</span><div class="ch"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div></div>
+    <div class="r"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z"/></svg></div><div class="v">Любимое</div><span class="cnt">12</span><div class="ch"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div></div>
+  </div>
+
+  <div class="grp">
+    <div class="r"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></div><div class="v">Способы оплаты<small>MIR ·· 8445, наличные</small></div><div class="ch"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div></div>
+    <div class="r"><div class="ic"><svg viewBox="0 0 24 24"><path d="M5 19L19 5"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="17" r="2"/></svg></div><div class="v">Промокоды<small>Ввести промокод</small></div><div class="ch"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div></div>
+    <div class="r"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s-6-5.5-6-11a6 6 0 0112 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg></div><div class="v">Адреса<small>ул. Ленина, 14 · Офис</small></div><div class="ch"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div></div>
+  </div>
+
+  <div class="grp">
+    <div class="r"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12H3z"/><path d="M9 21v-7h6v7"/></svg></div><div class="v">Магазины<small>Ближайший — Карцинское ш., 12Б</small></div><div class="ch"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div></div>
+    <div class="r"><div class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></div><div class="v">Поддержка<small>Позвонить или написать в WhatsApp</small></div><div class="ch"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div></div>
+  </div>
+
+  <div class="out">Выйти</div>
+  <div class="ver">Версия 1.0 · Деликат, Владикавказ</div>
+</div>
+
+<div class="tabs">
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Главная</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Каталог</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 15a9 9 0 0118 0z"/><path d="M12 6V4M3 19h18"/></svg>Кухня</div>
+  <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h11L21 7H6"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg>Корзина</div>
+  <div class="tab on"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg>Профиль</div>
+  <div class="home"></div>
+</div>
+</section>
+<div id="toast">Добавили в корзину</div>
+<div id="ok"><div class="ck"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div><h1>Заказ принят</h1><p>Привезём сегодня, 18:00–19:00.<br>Пирог поставим в печь в 17:20, мясо взвесим перед выездом.</p><div class="b">На главную</div></div>
+</div>
+<p class="hint">Прототип: работают вход по номеру, табы, плашка корзины, «Оформить», «Оплатить», кнопки «назад» и «+» на товарах.</p>
+<script>
+const order=['home','catalog','kitchen','cart','checkout','profile'];
+const hist=[];
+function show(id,push=true){
+  const cur=document.querySelector('.scr.on');
+  if(cur){ if(push) hist.push(cur.id.slice(2)); cur.classList.remove('on'); }
+  const el=document.getElementById('s-'+id); el.classList.add('on');
+  const sc=el.querySelector('.screen'); if(sc) sc.scrollTop=0;
+}
+function back(){ const p=hist.pop(); show(p||'home',false); }
+const tabMap={'Главная':'home','Каталог':'catalog','Кухня':'kitchen','Корзина':'cart','Профиль':'profile'};
+document.querySelectorAll('.tab').forEach(t=>{ t.classList.add('tap'); t.onclick=()=>show(tabMap[t.textContent.trim().replace(/^\d+/,'')]); });
+document.querySelectorAll('.cart').forEach(c=>{ c.classList.add('tap'); c.onclick=e=>{ e.stopPropagation(); show(c.querySelector('.go')&&e.target.closest('.go')?'checkout':'cart'); }; });
+document.querySelectorAll('#s-cart .pay, #s-cart .foot .pay').forEach(p=>{ p.classList.add('tap'); p.onclick=()=>show('checkout'); });
+document.querySelectorAll('#s-checkout .btn').forEach(b=>{ b.classList.add('tap'); b.onclick=()=>document.getElementById('ok').classList.add('on'); });
+document.querySelector('#ok .b').onclick=()=>{ document.getElementById('ok').classList.remove('on'); hist.length=0; show('home',false); };
+document.querySelectorAll('.scr .top .b:first-child, #s-profile .top .b:first-child').forEach(b=>{ b.classList.add('tap'); b.onclick=back; });
+let toastT; document.querySelectorAll('.plus').forEach(p=>{ p.classList.add('tap'); p.onclick=e=>{ e.stopPropagation(); const t=document.getElementById('toast'); t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),1200); }; });
+document.querySelectorAll('#s-catalog .c, #s-kitchen .c, #s-catalog .q, #s-home .cat, #s-home .chip').forEach(c=>{ c.classList.add('tap'); c.onclick=()=>{ const t=document.getElementById('toast'); t.textContent='Раздел в разработке'; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>{t.classList.remove('on'); t.textContent='Добавили в корзину';},1000); }; });
+document.querySelectorAll('.up').forEach(up=>{ const sc=up.closest('.scr').querySelector('.screen'); sc.addEventListener('scroll',()=>up.classList.toggle('show',sc.scrollTop>0.8*sc.clientHeight)); up.onclick=()=>sc.scrollTo({top:0,behavior:'smooth'}); });
+show('auth',false);
+(function(){ const a=document.getElementById('l1'), b=document.getElementById('l2'); function fit(){ b.style.fontSize='80px'; const k=a.getBoundingClientRect().width/b.getBoundingClientRect().width; b.style.fontSize=(80*k).toFixed(1)+'px'; } (document.fonts?document.fonts.ready:Promise.resolve()).then(fit); fit(); window.addEventListener('resize',fit);
+  (function(){ const inp=document.getElementById('num'), go=document.getElementById('go');
+    function fmt(d){ let o=''; if(d.length){o='('+d.slice(0,3); if(d.length>=3)o+=')'; if(d.length>3)o+=' '+d.slice(3,6); if(d.length>6)o+='-'+d.slice(6,8); if(d.length>8)o+='-'+d.slice(8,10);} return o; }
+    // caret position in formatted string after n digits
+    function posAfter(str,n){ if(n<=0) return 0; let c=0; for(let i=0;i<str.length;i++){ if(/\d/.test(str[i])){ c++; if(c===n) return i+1; } } return str.length; }
+    function clean(v){ let d=v.replace(/\D/g,''); if(d.length===11&&(d[0]==='7'||d[0]==='8')) d=d.slice(1); return d.slice(0,10); }
+    function apply(d,n){ inp.value=fmt(d); inp.dataset.d=d; go.classList.toggle('dis',d.length<10); const p=posAfter(inp.value,n); inp.setSelectionRange(p,p); }
+    inp.addEventListener('keydown',e=>{
+      if(e.key!=='Backspace'&&e.key!=='Delete') return;
+      const st=inp.selectionStart, en=inp.selectionEnd, v=inp.value;
+      const digitsBefore=(str,i)=>str.slice(0,i).replace(/\D/g,'').length;
+      let d=clean(v), a=digitsBefore(v,st), b=digitsBefore(v,en);
+      if(st!==en){ d=d.slice(0,a)+d.slice(b); }
+      else if(e.key==='Backspace'){ if(a===0) return; d=d.slice(0,a-1)+d.slice(a); a=a-1; }
+      else { if(a>=d.length) return; d=d.slice(0,a)+d.slice(a+1); }
+      e.preventDefault(); apply(d,a);
+    });
+    inp.addEventListener('input',()=>{ const st=inp.selectionStart; const n=inp.value.slice(0,st).replace(/\D/g,'').length; apply(clean(inp.value),n); });
+    go.onclick=()=>{ if(go.classList.contains('dis')){ inp.focus(); return; } const d=inp.dataset.d||''; document.getElementById('shown').textContent='+7 '+d.slice(0,3)+' '+d.slice(3,6)+'-'+d.slice(6,8)+'-'+d.slice(8,10); document.getElementById('step1').style.display='none'; document.getElementById('step2').style.display='block'; };
+  })();
+  document.getElementById('authok').onclick=()=>{ if(document.getElementById('authok').classList.contains('dis')){ document.getElementById('code').focus(); return; } hist.length=0; show('home',false); };
+  (function(){ const code=document.getElementById('code'), bx=[...document.querySelectorAll('#boxes .bx')], ok=document.getElementById('authok'), re=document.getElementById('re');
+    function draw(){ const d=code.value.replace(/\D/g,'').slice(0,4); code.value=d; bx.forEach((b,i)=>{ b.textContent=d[i]||''; b.classList.toggle('on',i===Math.min(d.length,3)); }); ok.classList.toggle('dis',d.length<4); }
+    code.addEventListener('input',draw); draw();
+    let t=59, iv; function tick(){ if(t<=0){ re.textContent='Отправить код ещё раз'; re.classList.add('act'); clearInterval(iv); return; } re.textContent='Отправить ещё раз через 0:'+String(t).padStart(2,'0'); t--; }
+    re.onclick=()=>{ if(!re.classList.contains('act')) return; re.classList.remove('act'); t=59; tick(); iv=setInterval(tick,1000); };
+    document.getElementById('go').addEventListener('click',()=>{ if(document.getElementById('step2').style.display==='block'){ code.value=''; draw(); setTimeout(()=>code.focus(),50); clearInterval(iv); t=59; tick(); iv=setInterval(tick,1000); } });
+    document.getElementById('boxes').addEventListener('click',()=>code.focus());
+  })();
+  document.getElementById('skip').onclick=()=>{ hist.length=0; show('home',false); };
+})();
+</script>
+</body>
+</html>
